@@ -144,26 +144,24 @@ def query(query:Query):
     print(query_text)
     # return query_text
     embedding_function = OllamaEmbeddings(model="nomic-embed-text")
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function,collection_name='AAPL1',)
-    d={"Ticker":"AAPL"}
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
-    results = db.similarity_search_with_score(query_text, k=8,filter=d)
+    results = db.similarity_search_with_score(query_text, k=8)
     print(results)
     print(len(results))
-    # context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
-    # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-    # prompt = prompt_template.format(context=context_text, question=query_text)
-    # # print(prompt)
+    context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
+    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+    prompt = prompt_template.format(context=context_text, question=query_text)
+    # print(prompt)
 
-    # model = Ollama(model="mistral")
-    # response_text = model.invoke(prompt)
+    model = Ollama(model="mistral")
+    response_text = model.invoke(prompt)
 
-    # sources = [doc.metadata.get("id", None) for doc, _score in results]
-    # formatted_response = f"Response: {response_text}\nSources: {sources}"
-    # print(formatted_response)
-    response_text = 'cbhsavchs z,,,'
-    # return {"response":response_text,"sources":json.dumps(sources)}
-    return {"response":response_text}
+    sources = [doc.metadata.get("id", None) for doc, _score in results]
+    formatted_response = f"Response: {response_text}\nSources: {sources}"
+    print(formatted_response)
+    return {"response":response_text,"sources":json.dumps(sources)}
+    
 
 
 
@@ -194,7 +192,7 @@ def generate_questions():
         prompt = prompt_template.format(context=context_text)
         # print(prompt)
 
-        model = Ollama(model="mistral")
+        model = Ollama(model="llama3")
         response_text = model.invoke(prompt)
         combined_text+=response_text
         print(response_text)
@@ -240,7 +238,7 @@ def entity_extraction():
         prompt = prompt_template.format(context=context_text)
         # print(prompt)
 
-        model = Ollama(model="mistral")
+        model = Ollama(model="llama3")
         response_text = model.invoke(prompt)
         combined_text+=response_text
         print(response_text)
