@@ -70,6 +70,6 @@
 3. Start the React app:
 
     ```sh
-    npm start
+    npm run dev
     ```
 
